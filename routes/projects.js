@@ -47,7 +47,6 @@ router.delete("/:id" , async (req , res) => {
     }
 })
 
-
 // Getting web projects
 
 router.get("/web" , async (req , res)=> {
@@ -81,5 +80,8 @@ router.get("/game-dev" , async (req , res)=> {
         res.status(500).json({message : err.message})
     }
 })
+
+
+
 
 module.exports = router
