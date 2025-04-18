@@ -33,6 +33,21 @@ const projectsSchema = new mongoose.Schema({
     link : {
         type : String , 
         required : true 
+    },
+    slug: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    } ,
+    features : {
+        type : [String],
+        default : []
+    },
+    technologies : {
+        type : [String],
+        default : []
     }
 })
 
