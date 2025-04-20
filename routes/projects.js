@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
+})
 
 
 router.get("/:slug" , async (req , res) => {
@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
     category: req.body.category,
     link: req.body.link,
     type: req.body.type,
-  });
+  })
 
   try {
     const newProject = await project.save();
@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
-});
+})
 
 router.put("/:id", async (req, res) => {
     const { id } = req.params;
