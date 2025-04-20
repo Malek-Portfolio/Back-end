@@ -1,7 +1,7 @@
 require("dotenv").config()
 
 const cors = require("cors")
-
+const rateLimiter = require("express-rate-limit")
 
 const express = require("express");
 
@@ -38,7 +38,13 @@ app.use("/projects" , projectsRouter)
 
 const contactRouter = require("./routes/contact")
 
-app.use("/contact" , contactRouter )
+const contactLimiter = rateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Too many contact attempts from this IP, please try again later"
+})
+
+app.use("/contact" , contactLimiter ,contactRouter )
 
 app.listen(3001, () => {
   console.log("server has started");
