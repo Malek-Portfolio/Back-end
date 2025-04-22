@@ -1,23 +1,24 @@
-require("dotenv").config()
+require("dotenv").config();
 
-const cors = require("cors")
-const rateLimiter = require("express-rate-limit")
-
+const cors = require("cors");
+const rateLimiter = require("express-rate-limit");
+const helmet = require("helmet");
 const express = require("express");
 
-
 const app = express();
+app.use(helmet());
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 const mongoose = require("mongoose");
 
-
-mongoose.connect(process.env.DATABASE_URL)
+mongoose.connect(process.env.DATABASE_URL);
 
 const db = mongoose.connection;
 
@@ -28,24 +29,22 @@ db.on("error", (err) => {
 db.once("open", () => {
   console.log("connected to Database");
 });
+app.use(express.json());
 
-app.use(express.json())
+const projectsRouter = require("./routes/projects");
 
-const projectsRouter = require("./routes/projects")
+app.use("/projects", projectsRouter);
 
-app.use("/projects" , projectsRouter)
+const contactRouter = require("./routes/contact");
 
+// const contactLimiter = rateLimiter({
+//   windowMs: 5 * 60 * 1000,
+//   max: 10,
+//   message: "Too many contact attempts from this IP, please try again later",
+// });
 
-const contactRouter = require("./routes/contact")
-
-const contactLimiter = rateLimiter({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: "Too many contact attempts from this IP, please try again later"
-})
-
-app.use("/contact" , contactLimiter ,contactRouter )
+app.use("/contact", contactRouter);
 
 app.listen(3001, () => {
   console.log("server has started");
-})
+});
