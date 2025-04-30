@@ -40,6 +40,7 @@ router.get("/:slug", async (req, res) => {
         slug: 1,
         features: 1,
         technologies: 1,
+        gallery : 1
       }
     );
     res.json(projects);
